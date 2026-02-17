@@ -1,52 +1,52 @@
-import { useEffect } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
-
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Navbar } from "./components/Navbar";
+import { HeroSection } from "./components/HeroSection";
+import { VideoSection } from "./components/VideoSection";
+import { FeaturesSection } from "./components/FeaturesSection";
+import { TestimonialsSection } from "./components/TestimonialsSection";
+import { PricingSection } from "./components/PricingSection";
+import { CTASection } from "./components/CTASection";
+import { Footer } from "./components/Footer";
 
 function App() {
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark(!isDark);
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+    <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
+      {/* Subtle grain overlay */}
+      <div className="fixed inset-0 pointer-events-none grain" />
+      
+      <AnimatePresence mode="wait">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Navbar isDark={isDark} toggleTheme={toggleTheme} />
+          <main>
+            <HeroSection />
+            <VideoSection />
+            <FeaturesSection />
+            <TestimonialsSection />
+            <PricingSection />
+            <CTASection />
+          </main>
+          <Footer />
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
