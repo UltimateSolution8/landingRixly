@@ -13,21 +13,30 @@ export const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center pt-20"
+      className="relative min-h-screen flex items-center pt-20 ribbon-container"
       data-testid="hero-section"
     >
       {/* Background glow and subtle waves */}
-      <div className="absolute inset-0 bg-[#F1F5F9]" />
-      <div className="absolute inset-0 opacity-[0.12] pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-light blur-[120px]" />
-        <div className="absolute bottom-[20%] right-[-5%] w-[30%] h-[30%] rounded-full bg-primary-dark blur-[100px]" />
+      <div className="absolute inset-0 bg-background" />
+      <div className="absolute inset-0 opacity-[0.12] dark:opacity-[0.05] pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[120px]" />
+        <div className="absolute bottom-[20%] right-[-5%] w-[30%] h-[30%] rounded-full bg-primary/10 blur-[100px]" />
       </div>
+
+      {/* Animated Ribbons */}
+      <div className="ribbon top-[-10%] left-[-10%]" />
+      <div className="ribbon top-[20%] left-[-20%] [animation-delay:-5s]" />
+      <div className="ribbon top-[50%] left-[-15%] [animation-delay:-10s]" />
+
+      {/* Animated Ripples */}
+      <div className="ripple top-[20%] left-[10%] w-[400px] h-[400px]" />
+      <div className="ripple bottom-[10%] right-[5%] w-[300px] h-[300px] [animation-delay:-4s]" />
 
       {/* Abstract wave-like overlay (simplified) */}
       <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
-        style={{ backgroundImage: 'radial-gradient(circle at 10% 20%, rgba(20,184,166,0.1), transparent 40%)' }} />
+        style={{ backgroundImage: `radial-gradient(circle at 10% 20%, var(--primary-light), transparent 40%)` }} />
 
-      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+      <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left Content */}
           <motion.div
@@ -55,7 +64,7 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="font-heading text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1]"
+              className="font-heading text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1] text-foreground"
               data-testid="hero-title"
             >
               Turn Visitors Into{" "}
@@ -77,26 +86,30 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex flex-wrap gap-4 mb-12"
+              className="relative"
             >
-              <Button
-                size="lg"
-                className="rounded-full font-medium text-lg px-8 glow-primary glow-primary-hover btn-press"
-                data-testid="hero-get-started"
-                onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
-              >
-                Get Started Free
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="rounded-full font-medium text-lg px-8 btn-press"
-                data-testid="hero-book-demo"
-                onClick={() => document.getElementById("video")?.scrollIntoView({ behavior: "smooth" })}
-              >
-                Watch Demo
-              </Button>
+              <div className="flex flex-wrap gap-4 mb-4 relative z-10">
+                <Button
+                  size="lg"
+                  className="rounded-full font-medium text-lg px-8 glow-primary glow-primary-hover btn-press bg-primary-gradient border-none text-white shadow-[0_10px_30px_rgba(16,185,129,0.3)]"
+                  data-testid="hero-get-started"
+                  onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
+                >
+                  Get Started Free
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="rounded-full font-medium text-lg px-8 btn-press border-primary/20 hover:bg-primary/5 shadow-sm"
+                  data-testid="hero-book-demo"
+                  onClick={() => document.getElementById("video")?.scrollIntoView({ behavior: "smooth" })}
+                >
+                  Watch Demo
+                </Button>
+              </div>
+              {/* Light shades below buttons */}
+              <div className="absolute -bottom-8 left-0 right-0 h-16 bg-primary/10 blur-[60px] pointer-events-none opacity-50" />
             </motion.div>
 
             {/* Stats */}
@@ -140,17 +153,17 @@ export const HeroSection = () => {
                 initial={{ rotateY: 15, rotateX: 5 }}
                 animate={{ rotateY: 0, rotateX: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
-                className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl"
+                className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl trace-beam"
                 style={{ transformStyle: "preserve-3d" }}
               >
-                <div className="bg-white p-6 rounded-[20px] shadow-[0_20px_50px_rgba(15,23,42,0.1)] border border-[#E2E8F0]">
+                <div className="bg-card p-6 rounded-[20px] shadow-[0_20px_50px_rgba(15,23,42,0.1)] border border-border backdrop-blur-md bg-card/90">
                   <div className="flex items-center justify-between mb-8">
                     <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#E2E8F0]" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#E2E8F0]" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#E2E8F0]" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary/20" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary/20" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary/20" />
                     </div>
-                    <Badge variant="success" className="bg-[#DCFCE7] text-[#166534] border-none font-medium">
+                    <Badge variant="success" className="font-medium">
                       Live Processing
                     </Badge>
                   </div>
@@ -158,24 +171,24 @@ export const HeroSection = () => {
                   {/* Mock dashboard content */}
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <div className="font-heading font-bold text-xl text-[#0F172A]">Lead Dashboard</div>
-                      <div className="text-xs text-[#64748B] font-medium">Updated 2m ago</div>
+                      <div className="font-heading font-bold text-xl text-foreground">Lead Dashboard</div>
+                      <div className="text-xs text-muted-foreground font-medium">Updated 2m ago</div>
                     </div>
 
                     <div className="grid grid-cols-3 gap-4">
                       {[
-                        { label: "New Leads", value: "247", color: "#0D9488" },
-                        { label: "Qualified", value: "189", color: "#14B8A6" },
-                        { label: "Converted", value: "72", color: "#22C55E" },
+                        { label: "New Leads", value: "247", color: "var(--teal-600)" },
+                        { label: "Qualified", value: "189", color: "var(--teal-500)" },
+                        { label: "Converted", value: "72", color: "var(--teal-400)" },
                       ].map((item) => (
                         <div
                           key={item.label}
-                          className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3 text-center"
+                          className="bg-muted/30 border border-border rounded-xl p-3 text-center"
                         >
                           <div className="font-heading font-bold text-xl mb-0.5" style={{ color: item.color }}>
                             {item.value}
                           </div>
-                          <div className="text-[10px] uppercase tracking-wider font-semibold text-[#64748B]">
+                          <div className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">
                             {item.label}
                           </div>
                         </div>
@@ -183,7 +196,7 @@ export const HeroSection = () => {
                     </div>
 
                     {/* Mock chart */}
-                    <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-4 h-44 flex items-end gap-2 relative overflow-hidden">
+                    <div className="bg-muted/20 border border-border rounded-xl p-4 h-44 flex items-end gap-2 relative overflow-hidden">
                       <div className="absolute top-3 left-4 text-[10px] font-bold text-[#94A3B8] uppercase">Conversion Velocity</div>
                       {[40, 65, 45, 80, 55, 90, 70, 85, 60, 95, 75, 100].map(
                         (height, i) => (
