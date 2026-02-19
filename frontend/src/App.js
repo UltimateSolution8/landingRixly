@@ -12,7 +12,10 @@ import { Footer } from "./components/Footer";
 import AnalyticsDashboard from "./components/AnalyticsDashboard";
 
 function App() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    return localStorage.getItem("theme") === "dark" ||
+      (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  });
   const [view, setView] = useState("landing");
   const [error, setError] = useState(null);
 
@@ -25,7 +28,6 @@ function App() {
 
     const errorHandler = (e) => {
       console.error("Caught global error:", e);
-      // Don't crash the whole UI if it's a minor error
     };
 
     window.addEventListener('error', errorHandler);
@@ -36,6 +38,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    localStorage.setItem("theme", isDark ? "dark" : "light");
     if (isDark) {
       document.documentElement.classList.add("dark");
     } else {
@@ -63,22 +66,36 @@ function App() {
       {/* Subtle grain overlay */}
       <div className="fixed inset-0 pointer-events-none grain" />
 
-      {view === "landing" ? (
-        <div key="landing">
-          <Navbar isDark={isDark} toggleTheme={toggleTheme} setView={setView} />
-          <HeroSection />
-          <VideoSection />
-          <FeaturesSection />
-          <TestimonialsSection />
-          <PricingSection />
-          <CTASection />
-          <Footer />
-        </div>
-      ) : (
-        <div key="dashboard">
-          <AnalyticsDashboard onBack={() => setView("landing")} />
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {view === "landing" ? (
+          <motion.div
+            key="landing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Navbar isDark={isDark} toggleTheme={toggleTheme} setView={setView} />
+            <HeroSection />
+            <VideoSection />
+            <FeaturesSection />
+            <TestimonialsSection />
+            <PricingSection />
+            <CTASection />
+            <Footer />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="dashboard"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <AnalyticsDashboard onBack={() => setView("landing")} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
