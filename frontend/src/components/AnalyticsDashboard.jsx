@@ -57,20 +57,26 @@ const AnalyticsDashboard = ({ onBack }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [sortConfig, setSortConfig] = useState({ key: 'score', direction: 'desc' });
 
-    const sortedLeads = [...leadsDataRaw]
-        .filter(lead =>
-            lead.user.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            lead.sub.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-        .sort((a, b) => {
-            if (a[sortConfig.key] < b[sortConfig.key]) {
-                return sortConfig.direction === 'asc' ? -1 : 1;
-            }
-            if (a[sortConfig.key] > b[sortConfig.key]) {
-                return sortConfig.direction === 'asc' ? 1 : -1;
-            }
+    const sortedLeads = React.useMemo(() => {
+        let filtered = [...leadsDataRaw];
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase().trim();
+            filtered = filtered.filter(lead =>
+                lead.user.toLowerCase().includes(query) ||
+                lead.sub.toLowerCase().includes(query) ||
+                lead.status.toLowerCase().includes(query)
+            );
+        }
+
+        return filtered.sort((a, b) => {
+            const aValue = a[sortConfig.key];
+            const bValue = b[sortConfig.key];
+
+            if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+            if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
             return 0;
         });
+    }, [searchQuery, sortConfig]);
 
     const handleSort = (key) => {
         setSortConfig(prev => ({
@@ -447,8 +453,8 @@ const AnalyticsDashboard = ({ onBack }) => {
                                                                     animate={{ width: `${lead.score}%` }}
                                                                     transition={{ duration: 1, ease: "easeOut" }}
                                                                     className={`h-full rounded-full ${lead.score > 90 ? 'bg-emerald-500 shadow-[0_0_8px_#10B981]' :
-                                                                            lead.score > 80 ? 'bg-emerald-400' :
-                                                                                'bg-slate-400'
+                                                                        lead.score > 80 ? 'bg-emerald-400' :
+                                                                            'bg-slate-400'
                                                                         }`}
                                                                 />
                                                             </div>
@@ -457,8 +463,8 @@ const AnalyticsDashboard = ({ onBack }) => {
                                                     </TableCell>
                                                     <TableCell>
                                                         <Badge className={`border-none ${lead.status === "High Priority" ? "bg-emerald-500/10 text-emerald-600" :
-                                                                lead.status === "Nurturing" ? "bg-amber-500/10 text-amber-600" :
-                                                                    "bg-slate-500/10 text-slate-600"
+                                                            lead.status === "Nurturing" ? "bg-amber-500/10 text-amber-600" :
+                                                                "bg-slate-500/10 text-slate-600"
                                                             }`}>
                                                             {lead.status}
                                                         </Badge>
